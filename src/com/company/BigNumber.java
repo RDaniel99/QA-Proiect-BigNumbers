@@ -7,6 +7,10 @@ import java.util.stream.Collectors;
 
 public class BigNumber {
 
+    private static final BigNumber ZERO = new BigNumber("0");
+    private static final BigNumber ONE = new BigNumber("1");
+    private static final BigNumber TWO = new BigNumber("2");
+
     private final Integer totalDigits;
     private final List<Integer> digits;
 
@@ -115,16 +119,16 @@ public class BigNumber {
 
         if(compare(divisor) < 0) {
 
-            return new BigNumber("0");
+            return ZERO;
         }
 
         if(compare(divisor) == 0) {
 
-            return new BigNumber("1");
+            return ONE;
         }
 
         StringBuilder numberString = new StringBuilder();
-        BigNumber number = new BigNumber("0");
+        BigNumber number = ZERO;
         int index = totalDigits - 1;
 
         StringBuilder resultBuilder = new StringBuilder();
@@ -153,6 +157,28 @@ public class BigNumber {
         }
 
         return new BigNumber(resultBuilder.toString()).removeTrailingZeros();
+    }
+
+    public static BigNumber raisedTo(BigNumber base, BigNumber exponent) {
+
+        if(exponent.compare(ZERO) == 0) {
+
+            return ONE;
+        }
+
+        BigNumber result = raisedTo(base, exponent.division(TWO));
+
+        if(exponent.isEven()) {
+
+            return result.multiply(result);
+        }
+
+        return result.multiply(result).multiply(base);
+    }
+
+    private boolean isEven() {
+
+        return digits.get(0) % 2 == 0;
     }
 
     private int compare(BigNumber number) {
