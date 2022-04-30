@@ -135,14 +135,14 @@ public class BigNumber {
 
         while(index >= 0) {
 
-            if(number.compare(divisor) < 0) {
+            if(divisor.compare(number) >= 0) {
 
                 numberString.append(digits.get(index));
                 number = new BigNumber(numberString.toString());
             }
 
             int resultDigit = 0;
-            while (number.compare(divisor) >= 0) {
+            while (divisor.compare(number) <= 0) {
 
                 number = number.subtract(divisor);
                 resultDigit++;
@@ -176,12 +176,38 @@ public class BigNumber {
         return result.multiply(result).multiply(base);
     }
 
+    public static BigNumber squareRoot(BigNumber number) {
+
+        BigNumber left = ZERO;
+        BigNumber right = number;
+
+        while (left.compare(right) <= 0) {
+
+            System.out.println("Search for " + left + " and " + right);
+
+            BigNumber middle = left.add(right).division(TWO);
+
+            if(raisedTo(middle, TWO).compare(number) <= 0) {
+
+                left = middle.add(ONE);
+            }
+            else {
+
+                right = middle.subtract(ONE);
+            }
+        }
+
+        return right;
+    }
+
     private boolean isEven() {
 
         return digits.get(0) % 2 == 0;
     }
 
     private int compare(BigNumber number) {
+
+        number = number.removeTrailingZeros();
 
         if(!number.totalDigits.equals(totalDigits)) {
 
