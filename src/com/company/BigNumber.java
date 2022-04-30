@@ -72,6 +72,10 @@ public class BigNumber {
                 carry = 1;
                 resultDigit += 10;
             }
+            else {
+
+                carry = 0;
+            }
 
             resultBuilder.append(resultDigit);
         }
@@ -80,8 +84,6 @@ public class BigNumber {
     }
 
     public BigNumber multiply(BigNumber number) {
-
-        List<Integer> numberDigits = number.digits;
 
         int[] result = new int[number.totalDigits + totalDigits];
 
@@ -107,6 +109,50 @@ public class BigNumber {
         }
 
         return new BigNumber(resultBuilder.reverse().toString());
+    }
+
+    public BigNumber division(BigNumber divisor) {
+
+        if(compare(divisor) < 0) {
+
+            return new BigNumber("0");
+        }
+
+        if(compare(divisor) == 0) {
+
+            return new BigNumber("1");
+        }
+
+        StringBuilder numberString = new StringBuilder();
+        BigNumber number = new BigNumber("0");
+        int index = totalDigits - 1;
+
+        StringBuilder resultBuilder = new StringBuilder();
+
+        while(index >= 0) {
+
+            if(number.compare(divisor) < 0) {
+
+                numberString.append(digits.get(index));
+                number = new BigNumber(numberString.toString());
+            }
+
+            int resultDigit = 0;
+            while (number.compare(divisor) >= 0) {
+
+                number = number.subtract(divisor);
+                resultDigit++;
+            }
+
+            resultBuilder.append(resultDigit);
+
+            numberString = new StringBuilder();
+            numberString.append(number);
+
+            index--;
+        }
+
+        return new BigNumber(resultBuilder.toString()).removeTrailingZeros();
     }
 
     private int compare(BigNumber number) {
