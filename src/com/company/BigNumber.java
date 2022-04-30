@@ -23,9 +23,15 @@ public class BigNumber {
         builder.reverse();
         number = builder.toString();
 
-        digits.addAll(number.chars()
-                .mapToObj(c -> Integer.parseInt(String.valueOf((char) c)))
-                .collect(Collectors.toList()));
+        try {
+            digits.addAll(number.chars()
+                    .mapToObj(c -> Integer.parseInt(String.valueOf((char) c)))
+                    .collect(Collectors.toList()));
+
+        } catch (NumberFormatException e) {
+
+            System.out.println("The argument " + builder.reverse() + " is not a positive number");
+        }
 
         totalDigits = digits.size();
     }
@@ -125,6 +131,11 @@ public class BigNumber {
         if(compare(divisor) == 0) {
 
             return ONE;
+        }
+
+        if(divisor.compare(ZERO) == 0) {
+
+            throw new InvalidParameterException("You can not divide by zero");
         }
 
         StringBuilder numberString = new StringBuilder();
