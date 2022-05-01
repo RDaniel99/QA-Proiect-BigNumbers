@@ -1,0 +1,11 @@
+<expression>
+    (a+b)
+</expression>
+<variable>
+    <name>a</name>
+    <value>2</value>
+</variable>
+<variable>
+    <name>b</name>
+    <value>3</value>
+</variable>
