@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class BigNumber {
 
-    private static final BigNumber ZERO = new BigNumber("0");
+    public static final BigNumber ZERO = new BigNumber("0");
     private static final BigNumber ONE = new BigNumber("1");
     private static final BigNumber TWO = new BigNumber("2");
 
@@ -194,7 +194,6 @@ public class BigNumber {
 
         while (left.compare(right) <= 0) {
 
-            System.out.println("Search for " + left + " and " + right);
 
             BigNumber middle = left.add(right).division(TWO);
 
