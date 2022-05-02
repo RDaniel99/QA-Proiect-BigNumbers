@@ -11,6 +11,7 @@ public class Parser {
 
         switch (operator) {
             case ADD:
+
                 return firstNumber.add(secondNumber);
             case MINUS:
 
@@ -35,12 +36,10 @@ public class Parser {
 
             return false;
 
-        boolean lowestPriorityFirst = Objects.equals(firstOperator, ADD) || Objects.equals(firstOperator, MINUS);
         boolean highestPriorityFirst = Objects.equals(firstOperator, POW) || Objects.equals(firstOperator, SQRT);
         boolean mediumPriorityFirst = Objects.equals(firstOperator, MULTIPLY) || Objects.equals(firstOperator, DIVISION);
 
         boolean lowestPrioritySecond = Objects.equals(secondOperator, ADD) || Objects.equals(secondOperator, MINUS);
-        boolean highestPrioritySecond = Objects.equals(secondOperator, POW) || Objects.equals(secondOperator, SQRT);
         boolean mediumPrioritySecond = Objects.equals(secondOperator, MULTIPLY) || Objects.equals(secondOperator, DIVISION);
 
 
@@ -103,7 +102,7 @@ public class Parser {
             if (tokens[i] == ' ')
                 continue;
 
-            if (isLiteral(tokens[i]) && (!isLiteral(tokens[i - 1]) && !isLiteral(tokens[i + 1]))) {
+            if (isLiteral(tokens[i])) {
 
                 variables.push(values.get(tokens[i]));
             } else if (tokens[i] == '(') {
