@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * A class that represents a big integer positive number as an array and the all the basic operations that can be done
+ * with it
+ */
 public class BigNumber {
 
     public static final BigNumber ZERO = new BigNumber("0");
@@ -36,6 +40,64 @@ public class BigNumber {
         totalDigits = digits.size();
     }
 
+    /**
+     * Raise a big number to another big number and returns the result
+     *
+     * @param base     the number that will be raised to a given power
+     * @param exponent the power used to raise the base
+     * @return the result of base raised to the exponent as a BigNumber
+     */
+    public static BigNumber raisedTo(BigNumber base, BigNumber exponent) {
+
+        if (exponent.compare(ZERO) == 0) {
+
+            return ONE;
+        }
+
+        BigNumber result = raisedTo(base, exponent.division(TWO));
+
+        if (exponent.isEven()) {
+
+            return result.multiply(result);
+        }
+
+        return result.multiply(result).multiply(base);
+    }
+
+    /**
+     * Calculated the square root of a given {@link BigNumber}
+     *
+     * @param number The number fot which we want to calculate the square root
+     * @return The square root of the number if the square is an integer, otherwise the square root rounded down
+     */
+    public static BigNumber squareRoot(BigNumber number) {
+
+        BigNumber left = ZERO;
+        BigNumber right = number;
+
+        while (left.compare(right) <= 0) {
+
+
+            BigNumber middle = left.add(right).division(TWO);
+
+            if (raisedTo(middle, TWO).compare(number) <= 0) {
+
+                left = middle.add(ONE);
+            } else {
+
+                right = middle.subtract(ONE);
+            }
+        }
+
+        return right;
+    }
+
+    /**
+     * Adds two BigIntegers and returns the result as a new value
+     *
+     * @param number the number we want to add to the current value
+     * @return the adding result
+     */
     public BigNumber add(BigNumber number) {
 
         List<Integer> numberDigits = number.digits;
@@ -43,12 +105,12 @@ public class BigNumber {
         StringBuilder resultBuilder = new StringBuilder();
 
         int carry = 0;
-        for(int i = 0; i < numberDigits.size() || i < digits.size() || carry != 0; i++) {
+        for (int i = 0; i < numberDigits.size() || i < digits.size() || carry != 0; i++) {
 
             int resultDigit = carry;
 
-            if(digits.size() > i) resultDigit += digits.get(i);
-            if(numberDigits.size() > i) resultDigit += numberDigits.get(i);
+            if (digits.size() > i) resultDigit += digits.get(i);
+            if (numberDigits.size() > i) resultDigit += numberDigits.get(i);
 
             carry = resultDigit / 10;
             resultDigit %= 10;
@@ -59,9 +121,15 @@ public class BigNumber {
         return new BigNumber(resultBuilder.reverse().toString());
     }
 
+    /**
+     * Calculates the difference between to BigNumbers
+     *
+     * @param number The number we want to subtract from the current value
+     * @return The subtraction result
+     */
     public BigNumber subtract(BigNumber number) {
 
-        if(compare(number) < 0) {
+        if (compare(number) < 0) {
 
             throw new InvalidParameterException("First number smaller than second at subtract");
         }
@@ -71,18 +139,17 @@ public class BigNumber {
         StringBuilder resultBuilder = new StringBuilder();
 
         int carry = 0;
-        for(int i = 0; i < digits.size(); i++) {
+        for (int i = 0; i < digits.size(); i++) {
 
-            int resultDigit = digits.get(i)  - carry;
+            int resultDigit = digits.get(i) - carry;
 
-            if(numberDigits.size() > i) resultDigit -= numberDigits.get(i);
+            if (numberDigits.size() > i) resultDigit -= numberDigits.get(i);
 
-            if(resultDigit < 0) {
+            if (resultDigit < 0) {
 
                 carry = 1;
                 resultDigit += 10;
-            }
-            else {
+            } else {
 
                 carry = 0;
             }
@@ -93,12 +160,18 @@ public class BigNumber {
         return new BigNumber(resultBuilder.reverse().toString()).removeTrailingZeros();
     }
 
+    /**
+     * Multiplies two BigNumbers
+     *
+     * @param number The number that will multiply the current number
+     * @return The multiplication result
+     */
     public BigNumber multiply(BigNumber number) {
 
         int[] result = new int[number.totalDigits + totalDigits];
 
-        for(int index1 = 0; index1 < totalDigits; index1++) {
-            for(int index2 = 0; index2 < number.totalDigits; index2++) {
+        for (int index1 = 0; index1 < totalDigits; index1++) {
+            for (int index2 = 0; index2 < number.totalDigits; index2++) {
 
                 result[index1 + index2] += digits.get(index1) * number.digits.get(index2);
             }
@@ -106,11 +179,11 @@ public class BigNumber {
 
         int carry = 0;
         StringBuilder resultBuilder = new StringBuilder();
-        for(int index = 0; index < totalDigits + number.totalDigits - 1 || carry != 0; index++) {
+        for (int index = 0; index < totalDigits + number.totalDigits - 1 || carry != 0; index++) {
 
             int resultDigit = carry;
 
-            if(index < totalDigits + number.totalDigits - 1) resultDigit += result[index];
+            if (index < totalDigits + number.totalDigits - 1) resultDigit += result[index];
 
             carry = resultDigit / 10;
             resultDigit %= 10;
@@ -121,19 +194,25 @@ public class BigNumber {
         return new BigNumber(resultBuilder.reverse().toString());
     }
 
+    /**
+     * Divides two {@link BigNumber}
+     *
+     * @param divisor The number that will divide the current value
+     * @return the division result
+     */
     public BigNumber division(BigNumber divisor) {
 
-        if(compare(divisor) < 0) {
+        if (compare(divisor) < 0) {
 
             return ZERO;
         }
 
-        if(compare(divisor) == 0) {
+        if (compare(divisor) == 0) {
 
             return ONE;
         }
 
-        if(divisor.compare(ZERO) == 0) {
+        if (divisor.compare(ZERO) == 0) {
 
             throw new InvalidParameterException("You can not divide by zero");
         }
@@ -144,9 +223,9 @@ public class BigNumber {
 
         StringBuilder resultBuilder = new StringBuilder();
 
-        while(index >= 0) {
+        while (index >= 0) {
 
-            if(divisor.compare(number) >= 0) {
+            if (divisor.compare(number) >= 0) {
 
                 numberString.append(digits.get(index));
                 number = new BigNumber(numberString.toString());
@@ -170,46 +249,6 @@ public class BigNumber {
         return new BigNumber(resultBuilder.toString()).removeTrailingZeros();
     }
 
-    public static BigNumber raisedTo(BigNumber base, BigNumber exponent) {
-
-        if(exponent.compare(ZERO) == 0) {
-
-            return ONE;
-        }
-
-        BigNumber result = raisedTo(base, exponent.division(TWO));
-
-        if(exponent.isEven()) {
-
-            return result.multiply(result);
-        }
-
-        return result.multiply(result).multiply(base);
-    }
-
-    public static BigNumber squareRoot(BigNumber number) {
-
-        BigNumber left = ZERO;
-        BigNumber right = number;
-
-        while (left.compare(right) <= 0) {
-
-
-            BigNumber middle = left.add(right).division(TWO);
-
-            if(raisedTo(middle, TWO).compare(number) <= 0) {
-
-                left = middle.add(ONE);
-            }
-            else {
-
-                right = middle.subtract(ONE);
-            }
-        }
-
-        return right;
-    }
-
     private boolean isEven() {
 
         return digits.get(0) % 2 == 0;
@@ -219,14 +258,14 @@ public class BigNumber {
 
         number = number.removeTrailingZeros();
 
-        if(!number.totalDigits.equals(totalDigits)) {
+        if (!number.totalDigits.equals(totalDigits)) {
 
             return (totalDigits < number.totalDigits ? -1 : 1);
         }
 
-        for(int index = totalDigits - 1; index >= 0; index--) {
+        for (int index = totalDigits - 1; index >= 0; index--) {
 
-            if(!digits.get(index).equals(number.digits.get(index))) {
+            if (!digits.get(index).equals(number.digits.get(index))) {
 
                 return digits.get(index).compareTo(number.digits.get(index));
             }
@@ -237,7 +276,7 @@ public class BigNumber {
 
     private BigNumber removeTrailingZeros() {
 
-        while(digits.size() > 1 && digits.get(digits.size() - 1) == 0) {
+        while (digits.size() > 1 && digits.get(digits.size() - 1) == 0) {
 
             digits.remove(digits.size() - 1);
         }
@@ -250,7 +289,7 @@ public class BigNumber {
 
         StringBuilder builder = new StringBuilder();
 
-        for(int index = digits.size() - 1; index >= 0; index--) {
+        for (int index = digits.size() - 1; index >= 0; index--) {
 
             builder.append(digits.get(index));
         }
