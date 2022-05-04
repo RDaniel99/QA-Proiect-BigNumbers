@@ -7,7 +7,7 @@ import static com.company.OperatorsEnum.*;
 
 public class Parser {
 
-    public static BigNumber applyOp(String operator, BigNumber secondNumber, BigNumber firstNumber) {
+    private static BigNumber applyOp(String operator, BigNumber secondNumber, BigNumber firstNumber) {
 
         switch (operator) {
             case ADD:
@@ -30,7 +30,7 @@ public class Parser {
         return ZERO;
     }
 
-    public static boolean hasPrecedence(String firstOperator, String secondOperator) {
+    private static boolean hasPrecedence(String firstOperator, String secondOperator) {
 
         if (Objects.equals(secondOperator, "(") || Objects.equals(secondOperator, ")"))
 
@@ -62,7 +62,7 @@ public class Parser {
 
         char[] tokens = expression.toCharArray();
 
-        Set<Character> values = new HashSet<>();
+        Set<Character> values = new TreeSet<>();
 
         if (isLiteral(tokens[0]) && !isLiteral(tokens[1])) {
 
