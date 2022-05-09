@@ -1,74 +1,15 @@
-package com.company;
+package com.company.xml;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import com.company.BigNumber;
+
 import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
-public class XMLReader {
-
+public class XMLParser {
     private String xmlVariables;
-    private XMLInput input;
 
-    public void start() {
-
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("File: ");
-
-        String fileName = scanner.next();
-
-        File file = new File(fileName);
-        try {
-            scanner = new Scanner(file);
-        } catch (FileNotFoundException e) {
-
-            System.out.println("File not found");
-        }
-
-        StringBuilder builder = new StringBuilder();
-
-        while(scanner.hasNextLine()) {
-
-            builder.append(scanner.nextLine());
-        }
-
-        String xml = builder.toString().replace(" ", "");
-
-        try {
-            validateXML(xml);
-        } catch (InvalidParameterException e) {
-
-            System.out.println(e.getMessage());
-            return ;
-        }
-
-        try {
-            parseXML(xml);
-        } catch (InvalidParameterException e) {
-
-            System.out.println(e.getMessage());
-            return ;
-        }
-
-        System.out.println();
-    }
-
-    private void validateXML(String xml) {
-
-        if(!xml.startsWith("<expression>")) {
-
-            throw new InvalidParameterException("XML is not valid. It has to start with an expression");
-        }
-
-        if(!xml.contains("</expression>")) {
-
-            throw new InvalidParameterException("XML is not valid. It does not have an end tag for expression");
-        }
-    }
-
-    private void parseXML(String xml) {
+    public XMLInput parse(String xml) {
 
         int endExpression = xml.indexOf("</expression>");
 
@@ -105,11 +46,7 @@ public class XMLReader {
             xmlVariables = xmlVariables.substring(11);
         }
 
-        input = new XMLInput(expression, values);
-    }
-
-    public XMLInput getInput() {
-        return input;
+        return new XMLInput(expression, values);
     }
 
     private Character subtractVariableName() {

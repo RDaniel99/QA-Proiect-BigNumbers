@@ -1,6 +1,7 @@
 package com.company;
 
-import java.io.File;
+import com.company.xml.XMLReader;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -45,8 +46,11 @@ public class Main {
 
             } else if (userMode.equals("2")) {
 
+                Scanner xmlScanner = new Scanner(System.in);
+                System.out.println("File: ");
+                String fileName = xmlScanner.next();
                 XMLReader reader = new XMLReader();
-                reader.start();
+                reader.start(fileName);
 
                 System.out.println("Output file: ");
                 FileWriter file = new FileWriter(scanner.next());

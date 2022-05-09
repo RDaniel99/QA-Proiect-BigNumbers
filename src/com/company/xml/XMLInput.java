@@ -1,4 +1,6 @@
-package com.company;
+package com.company.xml;
+
+import com.company.BigNumber;
 
 import java.util.Map;
 
