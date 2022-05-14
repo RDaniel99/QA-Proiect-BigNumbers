@@ -37,21 +37,21 @@ public class XMLReaderTest {
     }
 
     @Test
-    public void successfullyParsedWhenXmlIsValid() throws FileNotFoundException {
+    public void successfullyParsedWhenXmlIsValid() {
 
-        when(xmlFileReader.read(filename)).thenReturn(xmlContent);
+        when(xmlFileReader.read()).thenReturn(xmlContent);
         when(xmlParser.parse(xmlContent)).thenReturn(xmlInput);
         assertDoesNotThrow(() -> xmlReader.start(filename));
 
-        verify(xmlFileReader).read(filename);
+        verify(xmlFileReader).read();
         verify(xmlValidator).validate(xmlContent);
         verify(xmlParser).parse(xmlContent);
     }
 
     @Test
-    public void throwsFileNotFoundWhenXmlFileReaderThrowsException() throws FileNotFoundException {
+    public void throwsFileNotFoundWhenXmlFileReaderThrowsException() {
 
-        when(xmlFileReader.read(wrongFilename)).thenThrow(FileNotFoundException.class);
+        when(xmlFileReader.read()).thenThrow(FileNotFoundException.class);
 
         assertThrows(FileNotFoundException.class, () -> xmlReader.start(wrongFilename));
 
@@ -60,26 +60,26 @@ public class XMLReaderTest {
     }
 
     @Test
-    public void parserIsNotCalledWhenXmlValidatorThrowsException() throws FileNotFoundException {
+    public void parserIsNotCalledWhenXmlValidatorThrowsException() {
 
-        when(xmlFileReader.read(filename)).thenReturn(xmlContent);
+        when(xmlFileReader.read()).thenReturn(xmlContent);
         doThrow(InvalidParameterException.class).when(xmlValidator).validate(xmlContent);
         assertDoesNotThrow(() -> xmlReader.start(filename));
 
-        verify(xmlFileReader).read(filename);
+        verify(xmlFileReader).read();
         verify(xmlValidator).validate(xmlContent);
         verifyZeroInteractions(xmlParser);
         assertNull(xmlReader.getInput());
     }
 
     @Test
-    public void inputIsNullWhenXmlParserThrowsException() throws FileNotFoundException {
+    public void inputIsNullWhenXmlParserThrowsException() {
 
-        when(xmlFileReader.read(filename)).thenReturn(xmlContent);
+        when(xmlFileReader.read()).thenReturn(xmlContent);
         when(xmlParser.parse(xmlContent)).thenThrow(InvalidParameterException.class);
         assertDoesNotThrow(() -> xmlReader.start(filename));
 
-        verify(xmlFileReader).read(filename);
+        verify(xmlFileReader).read();
         verify(xmlValidator).validate(xmlContent);
         verify(xmlParser).parse(xmlContent);
         assertNull(xmlReader.getInput());

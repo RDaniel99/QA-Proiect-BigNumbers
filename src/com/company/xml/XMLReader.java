@@ -15,7 +15,6 @@ public class XMLReader {
     public XMLReader() {
         this.xmlValidator = new XMLValidator();
         this.xmlParser = new XMLParser();
-        this.xmlFileReader = new XMLFileReader();
     }
 
     public XMLReader(XMLValidator xmlValidator, XMLParser xmlParser, XMLFileReader xmlFileReader) {
@@ -25,8 +24,10 @@ public class XMLReader {
     }
 
     public void start(String fileName) throws FileNotFoundException {
+        if (this.xmlFileReader == null)
+            this.xmlFileReader = new XMLFileReader(fileName);
 
-        String xml = xmlFileReader.read(fileName);
+        String xml = xmlFileReader.read();
 
         try {
             xmlValidator.validate(xml);

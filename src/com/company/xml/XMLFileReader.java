@@ -5,10 +5,20 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class XMLFileReader {
+    private Scanner scanner;
+    private String fileName;
 
-    public String read(String fileName) throws FileNotFoundException {
-        File file = new File(fileName);
-        Scanner scanner =  new Scanner(file);
+    public XMLFileReader(String fileName) throws FileNotFoundException {
+        this.fileName = fileName;
+        File file = new File(this.fileName);
+        scanner = new Scanner(file);
+    }
+
+    public XMLFileReader(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
+    public String read() {
         StringBuilder builder = new StringBuilder();
 
         while(scanner.hasNextLine()) {
