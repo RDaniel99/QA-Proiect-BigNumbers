@@ -21,7 +21,7 @@ public class XMLFileReader {
     public String read() {
         StringBuilder builder = new StringBuilder();
 
-        while(scanner.hasNextLine()) {
+        while (scanner.hasNextLine()) {
 
             builder.append(scanner.nextLine());
         }

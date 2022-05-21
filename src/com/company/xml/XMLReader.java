@@ -1,9 +1,7 @@
 package com.company.xml;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.security.InvalidParameterException;
-import java.util.Scanner;
 
 public class XMLReader {
 
@@ -34,7 +32,7 @@ public class XMLReader {
         } catch (InvalidParameterException e) {
 
             System.out.println(e.getMessage());
-            return ;
+            return;
         }
 
         try {
@@ -42,7 +40,7 @@ public class XMLReader {
         } catch (InvalidParameterException e) {
 
             System.out.println(e.getMessage());
-            return ;
+            return;
         }
 
         System.out.println();

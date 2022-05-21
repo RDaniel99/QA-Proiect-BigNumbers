@@ -1,9 +1,14 @@
 package com.company;
 
+import jdk.internal.util.xml.impl.Parser;
+
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * A class that represents a big integer positive number as an array and the all the basic operations that can be done
@@ -49,17 +54,28 @@ public class BigNumber {
      */
     public static BigNumber raisedTo(BigNumber base, BigNumber exponent) {
 
+        assertTrue(base.compare(ZERO) >= 0);
+        assertTrue(exponent.compare(ZERO) >= 0 );
+
+        BigNumber result;
         if (exponent.compare(ZERO) == 0) {
+
+            result = ONE;
+            assertEquals(result.compare(ONE), 0);
 
             return ONE;
         }
 
-        BigNumber result = raisedTo(base, exponent.division(TWO));
+        result = raisedTo(base, exponent.division(TWO));
 
         if (exponent.isEven()) {
 
-            return result.multiply(result);
+            result = result.multiply(result);
+
+            return result;
         }
+
+        assertTrue(result.compare(base) <= 0);
 
         return result.multiply(result).multiply(base);
     }
@@ -72,11 +88,12 @@ public class BigNumber {
      */
     public static BigNumber squareRoot(BigNumber number) {
 
+        assertTrue(number.compare(ZERO) >= 0);
+
         BigNumber left = ZERO;
         BigNumber right = number;
 
         while (left.compare(right) <= 0) {
-
 
             BigNumber middle = left.add(right).division(TWO);
 
@@ -89,6 +106,7 @@ public class BigNumber {
             }
         }
 
+        assertTrue(right.compare(number) <= 0);
         return right;
     }
 
@@ -99,6 +117,8 @@ public class BigNumber {
      * @return the adding result
      */
     public BigNumber add(BigNumber number) {
+
+        assertTrue(number.compare(ZERO) >= 0);
 
         List<Integer> numberDigits = number.digits;
 
@@ -115,10 +135,16 @@ public class BigNumber {
             carry = resultDigit / 10;
             resultDigit %= 10;
 
+
             resultBuilder.append(resultDigit);
         }
 
-        return new BigNumber(resultBuilder.reverse().toString());
+        BigNumber result = new BigNumber(resultBuilder.reverse().toString());
+
+        assertTrue(number.compare(result) <= 0);
+        assertTrue(this.compare(result) <= 0);
+
+        return result;
     }
 
     /**
@@ -128,6 +154,9 @@ public class BigNumber {
      * @return The subtraction result
      */
     public BigNumber subtract(BigNumber number) {
+
+        assertTrue(number.compare(ZERO) >= 0);
+        assertTrue(this.compare(ZERO) >= 0);
 
         if (compare(number) < 0) {
 
@@ -157,7 +186,12 @@ public class BigNumber {
             resultBuilder.append(resultDigit);
         }
 
-        return new BigNumber(resultBuilder.reverse().toString()).removeTrailingZeros();
+        BigNumber result = new BigNumber(resultBuilder.reverse().toString()).removeTrailingZeros();
+
+        assertTrue(result.compare(ZERO) >= 0);
+        assertTrue(this.compare(result) >= 0);
+
+        return result;
     }
 
     /**
@@ -167,6 +201,9 @@ public class BigNumber {
      * @return The multiplication result
      */
     public BigNumber multiply(BigNumber number) {
+
+        assertTrue(number.compare(ZERO) >= 0);
+        assertTrue(this.compare(ZERO) >= 0);
 
         int[] result = new int[number.totalDigits + totalDigits];
 
@@ -191,7 +228,12 @@ public class BigNumber {
             resultBuilder.append(resultDigit);
         }
 
-        return new BigNumber(resultBuilder.reverse().toString());
+        BigNumber resultNumber = new BigNumber(resultBuilder.reverse().toString());
+
+        assertTrue(resultNumber.compare(number) >= 0);
+        assertTrue(resultNumber.compare(this) >= 0);
+
+        return resultNumber;
     }
 
     /**
@@ -202,14 +244,23 @@ public class BigNumber {
      */
     public BigNumber division(BigNumber divisor) {
 
+        assertTrue(divisor.compare(ZERO) >= 0);
+
+        BigNumber result;
+
         if (compare(divisor) < 0) {
 
-            return ZERO;
+            result = ZERO;
+            assertEquals(0, result.compare(ZERO));
+
+            return result;
         }
 
         if (compare(divisor) == 0) {
 
-            return ONE;
+            result = ONE;
+            assertEquals(0, result.compare(ONE));
+            return result;
         }
 
         if (divisor.compare(ZERO) == 0) {
@@ -246,7 +297,14 @@ public class BigNumber {
             index--;
         }
 
-        return new BigNumber(resultBuilder.toString()).removeTrailingZeros();
+        result = new BigNumber(resultBuilder.toString()).removeTrailingZeros();
+
+        if (number.compare(ZERO) == 0) {
+
+            assertEquals(0, this.compare(divisor.multiply(result)));
+        }
+
+        return result;
     }
 
     private boolean isEven() {

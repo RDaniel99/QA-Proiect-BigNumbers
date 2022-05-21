@@ -5,10 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-import java.io.FileNotFoundException;
 import java.security.InvalidParameterException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 public class XMLReaderTest {
@@ -48,16 +48,6 @@ public class XMLReaderTest {
         verify(xmlParser).parse(xmlContent);
     }
 
-    @Test
-    public void throwsFileNotFoundWhenXmlFileReaderThrowsException() {
-
-        when(xmlFileReader.read()).thenThrow(FileNotFoundException.class);
-
-        assertThrows(FileNotFoundException.class, () -> xmlReader.start(wrongFilename));
-
-        verifyZeroInteractions(xmlValidator);
-        verifyZeroInteractions(xmlParser);
-    }
 
     @Test
     public void parserIsNotCalledWhenXmlValidatorThrowsException() {
@@ -68,7 +58,7 @@ public class XMLReaderTest {
 
         verify(xmlFileReader).read();
         verify(xmlValidator).validate(xmlContent);
-        verifyZeroInteractions(xmlParser);
+        verifyNoInteractions(xmlParser);
         assertNull(xmlReader.getInput());
     }
 

@@ -19,9 +19,9 @@ public class XMLParser {
 
         Map<Character, BigNumber> values = new HashMap<>();
 
-        while(!xmlVariables.isEmpty()) {
+        while (!xmlVariables.isEmpty()) {
 
-            if(!xmlVariables.startsWith("<variable>")) {
+            if (!xmlVariables.startsWith("<variable>")) {
 
                 throw new InvalidParameterException("Variables should be between <variable> and </variable> tags");
             }
@@ -31,14 +31,14 @@ public class XMLParser {
             Character variableName = subtractVariableName();
             String variableValueAsString = subtractVariableValue();
 
-            if(values.containsKey(variableName)) {
+            if (values.containsKey(variableName)) {
 
                 throw new InvalidParameterException("Variable " + variableName + " declared multiple times");
             }
 
             values.put(variableName, new BigNumber(variableValueAsString));
 
-            if(!xmlVariables.startsWith("</variable>")) {
+            if (!xmlVariables.startsWith("</variable>")) {
 
                 throw new InvalidParameterException("Variables should be between <variable> and </variable> tags");
             }
@@ -51,7 +51,7 @@ public class XMLParser {
 
     private Character subtractVariableName() {
 
-        if(!xmlVariables.startsWith("<name>")) {
+        if (!xmlVariables.startsWith("<name>")) {
 
             throw new InvalidParameterException("Name of variables should be between <name> and </name> tags");
         }
@@ -62,12 +62,12 @@ public class XMLParser {
 
         xmlVariables = xmlVariables.substring(xmlVariables.indexOf("</name>") + 7);
 
-        if(variableName.length() > 1) {
+        if (variableName.length() > 1) {
 
             throw new InvalidParameterException("Variable names should be formed only from one small letter");
         }
 
-        if(variableName.length() == 0) {
+        if (variableName.length() == 0) {
 
             throw new InvalidParameterException("Variable name can not be empty");
         }
@@ -77,7 +77,7 @@ public class XMLParser {
 
     private String subtractVariableValue() {
 
-        if(!xmlVariables.startsWith("<value>")) {
+        if (!xmlVariables.startsWith("<value>")) {
 
             throw new InvalidParameterException("Name of variables should be between <value> and </value> tags");
         }

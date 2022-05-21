@@ -20,7 +20,7 @@ public class XMLValidatorTest {
     }
 
     @Test
-    public void throwsExceptionWhenExpressionStartInvalid(){
+    public void throwsExceptionWhenExpressionStartInvalid() {
 
         String invalidXml = "(a+b)</expression><variable><name>a</name><value>2</value></variable><variable><name>b</name><value>3</value></variable>";
 
@@ -28,7 +28,7 @@ public class XMLValidatorTest {
     }
 
     @Test
-    public void throwsExceptionWhenExpressionContentInvalid(){
+    public void throwsExceptionWhenExpressionContentInvalid() {
 
         String invalidXml = "<expression>(a+b)<variable><name>a</name><value>2</value></variable><variable><name>b</name><value>3</value></variable>";
 
@@ -36,7 +36,7 @@ public class XMLValidatorTest {
     }
 
     @Test
-    public void successfullyWhenExpressionValid(){
+    public void successfullyWhenExpressionValid() {
 
         String validXml = "<expression>(a+b)</expression><variable><name>a</name><value>2</value></variable><variable><name>b</name><value>3</value></variable>";
 

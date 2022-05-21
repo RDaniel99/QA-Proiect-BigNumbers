@@ -22,7 +22,7 @@ public class XMLParserTest {
     }
 
     @Test
-    public void successfullyCreatesXmlInputWhenXmlIsValid(){
+    public void successfullyCreatesXmlInputWhenXmlIsValid() {
 
         String validXml = "<expression>(a+b)</expression><variable><name>a</name><value>2</value></variable><variable><name>b</name><value>3</value></variable>";
         Map<Character, BigNumber> expectedValues = new HashMap<>();
@@ -37,7 +37,7 @@ public class XMLParserTest {
     }
 
     @Test
-    public void throwsExceptionWhenXmlVariablesStartIsInvalid(){
+    public void throwsExceptionWhenXmlVariablesStartIsInvalid() {
 
         String invalidXml = "<expression>(a+b)</expression><name>a</name><value>2</value></variable><variable><name>b</name><value>3</value></variable>";
 
@@ -45,7 +45,7 @@ public class XMLParserTest {
     }
 
     @Test
-    public void throwsExceptionWhenXmlVariablesEndIsInvalid(){
+    public void throwsExceptionWhenXmlVariablesEndIsInvalid() {
 
         String invalidXml = "<expression>(a+b)</expression><variable><name>a</name><value>2</value><variable><name>b</name><value>3</value></variable>";
 
@@ -53,7 +53,7 @@ public class XMLParserTest {
     }
 
     @Test
-    public void throwsExceptionWhenVariablesMultipleTimesDeclared(){
+    public void throwsExceptionWhenVariablesMultipleTimesDeclared() {
 
         String invalidXml = "<expression>(a+b)</expression><variable><name>a</name><value>2</value></variable><variable><name>a</name><value>3</value></variable>";
 
@@ -61,7 +61,7 @@ public class XMLParserTest {
     }
 
     @Test
-    public void throwsExceptionWhenVariablesNameEmpty(){
+    public void throwsExceptionWhenVariablesNameEmpty() {
 
         String invalidXml = "<expression>(a+b)</expression><variable><name>a</name><value>2</value></variable><variable><name></name><value>3</value></variable>";
 
@@ -69,7 +69,7 @@ public class XMLParserTest {
     }
 
     @Test
-    public void throwsExceptionWhenVariableNameTooLong(){
+    public void throwsExceptionWhenVariableNameTooLong() {
 
         String invalidXml = "<expression>(a+b)</expression><variable><name>abvf</name><value>2</value></variable><variable><name>b</name><value>3</value></variable>";
 
@@ -77,7 +77,7 @@ public class XMLParserTest {
     }
 
     @Test
-    public void throwsExceptionWhenXmlVariablesNameInvalid(){
+    public void throwsExceptionWhenXmlVariablesNameInvalid() {
 
         String invalidXml = "<expression>(a+b)</expression><variable>a</name><value>2</value></variable><variable><name>b</name><value>3</value></variable>";
 
@@ -85,7 +85,7 @@ public class XMLParserTest {
     }
 
     @Test
-    public void throwsExceptionWhenXmlVariablesValueInvalid(){
+    public void throwsExceptionWhenXmlVariablesValueInvalid() {
 
         String invalidXml = "<expression>(a+b)</expression><variable><name>a</name>2</value></variable><variable><name>b</name><value>3</value></variable>";
 
