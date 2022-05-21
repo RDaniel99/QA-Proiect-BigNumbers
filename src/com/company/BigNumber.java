@@ -20,7 +20,7 @@ public class BigNumber {
     private static final BigNumber ONE = new BigNumber("1");
     private static final BigNumber TWO = new BigNumber("2");
 
-    private final Integer totalDigits;
+    private Integer totalDigits;
     private final List<Integer> digits;
 
     public BigNumber(String number) {
@@ -309,12 +309,19 @@ public class BigNumber {
 
     private boolean isEven() {
 
+        assert(digits.size() > 0 && totalDigits > 0);
+
         return digits.get(0) % 2 == 0;
     }
 
     private int compare(BigNumber number) {
 
+        assert(number.digits.size() == number.totalDigits);
+        assert(digits.size() == totalDigits);
+
         number = number.removeTrailingZeros();
+
+        assert(number.digits.get(number.digits.size() - 1) != 0 || number.digits.size() == 1);
 
         if (!number.totalDigits.equals(totalDigits)) {
 
@@ -334,16 +341,22 @@ public class BigNumber {
 
     private BigNumber removeTrailingZeros() {
 
+        assert(digits.size() == totalDigits);
+
         while (digits.size() > 1 && digits.get(digits.size() - 1) == 0) {
 
             digits.remove(digits.size() - 1);
+            totalDigits--;
         }
 
+        assert(digits.size() == totalDigits);
         return new BigNumber(toString());
     }
 
     @Override
     public String toString() {
+
+        assert(digits.size() == totalDigits);
 
         StringBuilder builder = new StringBuilder();
 
