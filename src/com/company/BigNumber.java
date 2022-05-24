@@ -75,8 +75,6 @@ public class BigNumber {
             return result;
         }
 
-        assertTrue(result.compare(base) <= 0);
-
         return result.multiply(result).multiply(base);
     }
 
@@ -95,18 +93,26 @@ public class BigNumber {
 
         while (left.compare(right) <= 0) {
 
+            assertTrue(left.compare(right) <= 0);
+
             BigNumber middle = left.add(right).division(TWO);
+
+            assertTrue(left.compare(middle) <= 0);
+            assertTrue(middle.compare(right) <= 0);
 
             if (raisedTo(middle, TWO).compare(number) <= 0) {
 
                 left = middle.add(ONE);
+                assert left.compare(middle) > 0;
             } else {
 
                 right = middle.subtract(ONE);
+                assert right.compare(middle) < 0;
             }
         }
 
         assertTrue(right.compare(number) <= 0);
+        assertTrue(left.compare(right) >= 0);
         return right;
     }
 
@@ -127,6 +133,7 @@ public class BigNumber {
         int carry = 0;
         for (int i = 0; i < numberDigits.size() || i < digits.size() || carry != 0; i++) {
 
+
             int resultDigit = carry;
 
             if (digits.size() > i) resultDigit += digits.get(i);
@@ -135,7 +142,8 @@ public class BigNumber {
             carry = resultDigit / 10;
             resultDigit %= 10;
 
-
+            assert carry >= 0 && carry <= 1;
+            assert resultDigit >= 0  && resultDigit <= 9;
             resultBuilder.append(resultDigit);
         }
 
@@ -176,12 +184,16 @@ public class BigNumber {
 
             if (resultDigit < 0) {
 
+                assert resultDigit >= -10;
                 carry = 1;
                 resultDigit += 10;
             } else {
 
                 carry = 0;
             }
+
+            assert resultDigit <= 9;
+            assert i >= 0 && i < digits.size();
 
             resultBuilder.append(resultDigit);
         }
@@ -222,8 +234,12 @@ public class BigNumber {
 
             if (index < totalDigits + number.totalDigits - 1) resultDigit += result[index];
 
+            assert index < totalDigits + number.totalDigits - 1 || carry != 0;
+
             carry = resultDigit / 10;
             resultDigit %= 10;
+
+            assert resultDigit >= 0 && resultDigit <=9;
 
             resultBuilder.append(resultDigit);
         }
@@ -289,6 +305,7 @@ public class BigNumber {
                 resultDigit++;
             }
 
+            assert resultDigit >= 0 && resultDigit <= 9;
             resultBuilder.append(resultDigit);
 
             numberString = new StringBuilder();
